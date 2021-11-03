@@ -5,10 +5,7 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 
     # PREPARE DATA
     gdf = gdf.to_crs(crs)
-    #gdf["is_gdf"] = True
     gdf['char'] = inside_symbol
-    # dissolve
-    #gdf = gdf.dissolve(by="is_gdf")
     
     
     # FORMAT ASCII EXTENT
