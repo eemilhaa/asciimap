@@ -10,7 +10,6 @@ def ascify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # dissolve
     #gdf = gdf.dissolve(by="is_gdf")
     
-
     
     # FORMAT ASCII EXTENT
     # get geometrical extents
