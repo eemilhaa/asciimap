@@ -1,7 +1,7 @@
 import geopandas as gpd
 import time
 
-def ascify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
+def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 
     # PREPARE DATA
     gdf = gdf.to_crs(crs)
