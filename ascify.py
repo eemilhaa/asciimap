@@ -30,23 +30,6 @@ def ascify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # number of rows
     nrows = int(maxchars / ratio)
 
-    ## Uncomment to automatically scale ascii depending on horizontal and vertical orientation
-    #if x_extent > y_extent:
-    #    # account for higher rowspace
-    #    ratio = (x_extent / y_extent) * row_space
-    #    # line length
-    #    ncols = maxchars
-    #    # number of rows
-    #    nrows = int(maxchars / ratio)
-    #else:
-    #    # account for higher rowspace
-    #    maxchars = maxchars / row_space
-    #    ratio = (y_extent / x_extent) / row_space
-    #    # line length
-    #    ncols = int(maxchars / ratio)
-    #    # number of rows
-    #    nrows = int(maxchars)
-
     
     # GENERATE A GEOMETRICAL POINT FOR EACH ASCII CHARACTER
     # axes as iterable lists
@@ -90,15 +73,6 @@ def ascify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # assign the outside_symbol where data doesn't overlap
     points['char'] = points['char'].fillna(outside_symbol)
 
-
-    #within = points.overlay(gdf, how='intersection')
-    #within["char"] = inside_symbol
-    #not_within = points.overlay(gdf, how='difference')
-    #not_within["char"] = outside_symbol
-    #
-    ## merge data
-    #points = within.append(not_within)
-
     
     # FORMAT DATA FROM GEOMETRIES TO ASCII
     # rows as groups
@@ -116,12 +90,7 @@ def ascify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # print ascii output
     for r in reversed(rows):
         print(r)
-        time.sleep(0.15)
-
-
-
-#world = gpd.read_file("./example-data/ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp")
-#ascify(gdf=world, crs=4326, inside_symbol="#", outside_symbol=" ")
+        time.sleep(0.1)
 
 
 
