@@ -1,5 +1,5 @@
 # asciimap
-Ascify your geospatial data!
+Asciify your geospatial data!
 
 ```                                                                                                    
                                                                                           
