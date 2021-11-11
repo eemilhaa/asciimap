@@ -86,7 +86,7 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # print ascii output
     for r in reversed(rows):
         print(r)
-        time.sleep(0.1)
+        time.sleep(0.05)
 
 
 
