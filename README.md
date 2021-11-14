@@ -1,5 +1,5 @@
 # asciimap
-Asciify your geospatial data!
+A tool for producing ascii maps with your geospatial data.
 
 ```                                                                                                    
                                                                                           

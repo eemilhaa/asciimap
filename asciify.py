@@ -98,7 +98,7 @@ if __name__ == "__main__":
     print("\nRunning asciimap demo with natural earth data...")
     world = gpd.read_file("./example-data/ne_50m_admin_0_countries.zip")
     
-    input("\n>> Press enter to progress")
+    input("\n>> git Press enter to progress")
     input("\n>> Asciify the entire data set:")
     asciify(gdf=world)
     
