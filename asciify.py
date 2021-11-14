@@ -85,7 +85,7 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # print ascii output
     for r in reversed(rows):
         print(r)
-        time.sleep(0.1)
+        time.sleep(0.05)
         
 
         
@@ -94,39 +94,40 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 # Demo script       
 if __name__ == "__main__":
     import mapclassify
-    print("\n\nRunning asciimap demo with natural earth data")
     
+    print("\nRunning asciimap demo with natural earth data...")
     world = gpd.read_file("./example-data/ne_50m_admin_0_countries.zip")
     
-    print("\nAsciify the entire data set:")
+    input("\n>> Press enter to progress")
+    input("\n>> Asciify the entire data set:")
     asciify(gdf=world)
     
-    print("\nUse a different map projection and ")
+    input("\n>> Use a different map projection:")
     asciify(gdf=world, crs=3035)
     
-    print("\nAsciify a country, customize symbols")
+    input("\n>> Asciify a single country, customize symbols and ascii size:")
     finland = world.loc[world["NAME_EN"] == "Finland"]
     asciify(
         gdf=finland,
         inside_symbol=" ",
         outside_symbol="_",
-        width=30,
+        width=40,
         crs=3067
     )
     
-    print("\nAnother example:")
+    input("\n>> Another example:")
     iceland = world.loc[world["NAME_EN"] == "Iceland"]
-    asciify(iceland, "#", "~", 100, 5638)
+    asciify(iceland, "#", "~", 80, 5638)
     
     print("\nThe symbol assignment can be as complex as you like.")
-    print("\nEHere the symbols are assigned based on first letters of country names:")
+    input("\n>> For example, assign symbols based on first letters of country names:")
     asciify(
         gdf=world,
         inside_symbol=world["NAME_EN"].str[0],
-        width=150
+        width=140
     )
     
-    print("\nAnd heres an ascii choropleth map:")
+    input("\n>> How about an ascii choropleth map?")
     # classify data
     column = "POP_EST"
     bins = mapclassify.NaturalBreaks(world[column], k=5).bins
@@ -147,15 +148,15 @@ if __name__ == "__main__":
     asciify(
         gdf=world,
         inside_symbol=world["custom_char"].str[0],
-        width=180
+        width=140
     )
     
-    print("Population:")
+    print("\n\nPopulation:")
     print(f".  =  {world[column].min()} - {str(bins[0])[0:-2]}")
     print(f":  =  {str(bins[0])[0:-2]} - {str(bins[1])[0:-2]}")
     print(f"i  =  {str(bins[1])[0:-2]} - {str(bins[2])[0:-2]}")
     print(f"I  =  {str(bins[2])[0:-2]} - {str(bins[3])[0:-2]}")
-    print(f"#  =  {str(bins[3])[0:-2]} - {str(bins[4])[0:-2]}")
+    print(f"#  =  {str(bins[3])[0:-2]} - {str(bins[4])[0:-2]}\n\n")
 
 
 
