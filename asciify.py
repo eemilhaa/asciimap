@@ -5,7 +5,7 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 
     # PREPARE DATA
     gdf = gdf.to_crs(crs)
-    gdf['char'] = inside_symbol
+    gdf["char"] = inside_symbol
     
     
     # FORMAT ASCII EXTENT
@@ -14,17 +14,15 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     x_extent = maxx - minx
     y_extent = maxy - miny
 
-    # define ascii max size
-    maxchars = width
     # space between rows = about 2x character space
     row_space = 2
 
     # account for higher rowspace
     ratio = (x_extent / y_extent) * row_space
     # line length
-    ncols = maxchars
+    ncols = width
     # number of rows
-    nrows = int(maxchars / ratio)
+    nrows = int(width / ratio)
 
     
     # GENERATE A GEOMETRICAL POINT FOR EACH ASCII CHARACTER
@@ -39,6 +37,7 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # generate points
     points = gpd.GeoDataFrame()
 
+    # count to use as index
     count = 0
 
     # loop rows
@@ -65,14 +64,14 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 
     # ASSIGN ASCII CHARACTER TO EACH POINT
     # sjoin the inside_symbol
-    points = points.sjoin(gdf, how='left')
-    # assign the outside_symbol where data doesn't overlap
-    points['char'] = points['char'].fillna(outside_symbol)
+    points = points.sjoin(gdf, how="left")
+    # assign the outside_symbol where data doesn"t overlap
+    points["char"] = points["char"].fillna(outside_symbol)
 
     
     # FORMAT DATA FROM GEOMETRIES TO ASCII
     # rows as groups
-    row_grouped = points.sort_values('x_coord').groupby("y_coord")
+    row_grouped = points.sort_values("x_coord").groupby("y_coord")
 
     # list for rows
     rows = []
@@ -86,7 +85,77 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # print ascii output
     for r in reversed(rows):
         print(r)
-        time.sleep(0.05)
+        time.sleep(0.1)
+        
+
+        
+        
+        
+# Demo script       
+if __name__ == "__main__":
+    import mapclassify
+    print("\n\nRunning asciimap demo with natural earth data")
+    
+    world = gpd.read_file("./example-data/ne_50m_admin_0_countries.zip")
+    
+    print("\nAsciify the entire data set:")
+    asciify(gdf=world)
+    
+    print("\nUse a different map projection and ")
+    asciify(gdf=world, crs=3035)
+    
+    print("\nAsciify a country, customize symbols")
+    finland = world.loc[world["NAME_EN"] == "Finland"]
+    asciify(
+        gdf=finland,
+        inside_symbol=" ",
+        outside_symbol="_",
+        width=30,
+        crs=3067
+    )
+    
+    print("\nAnother example:")
+    iceland = world.loc[world["NAME_EN"] == "Iceland"]
+    asciify(iceland, "#", "~", 100, 5638)
+    
+    print("\nThe symbol assignment can be as complex as you like.")
+    print("\nEHere the symbols are assigned based on first letters of country names:")
+    asciify(
+        gdf=world,
+        inside_symbol=world["NAME_EN"].str[0],
+        width=150
+    )
+    
+    print("\nAnd heres an ascii choropleth map:")
+    # classify data
+    column = "POP_EST"
+    bins = mapclassify.NaturalBreaks(world[column], k=5).bins
+    
+    # Assign symbols using the bins
+    for i, r in world.iterrows():
+        if world[column][i] <= bins[0]:
+            world.at[i, "custom_char"] = "."
+        elif world[column][i] <= bins[1]:
+            world.at[i, "custom_char"] = ":"
+        elif world[column][i] <= bins[2]:
+            world.at[i, "custom_char"] = "i"
+        elif world[column][i] <= bins[3]:
+            world.at[i, "custom_char"] = "I"
+        elif world[column][i] <= bins[4]:
+            world.at[i, "custom_char"] = "#"
+
+    asciify(
+        gdf=world,
+        inside_symbol=world["custom_char"].str[0],
+        width=180
+    )
+    
+    print("Population:")
+    print(f".  =  {world[column].min()} - {str(bins[0])[0:-2]}")
+    print(f":  =  {str(bins[0])[0:-2]} - {str(bins[1])[0:-2]}")
+    print(f"i  =  {str(bins[1])[0:-2]} - {str(bins[2])[0:-2]}")
+    print(f"I  =  {str(bins[2])[0:-2]} - {str(bins[3])[0:-2]}")
+    print(f"#  =  {str(bins[3])[0:-2]} - {str(bins[4])[0:-2]}")
 
 
 
