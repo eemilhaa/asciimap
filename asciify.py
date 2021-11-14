@@ -19,8 +19,6 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
 
     # account for higher rowspace
     ratio = (x_extent / y_extent) * row_space
-    # line length
-    ncols = width
     # number of rows
     nrows = int(width / ratio)
 
@@ -28,10 +26,10 @@ def asciify(gdf, inside_symbol="#", outside_symbol=" ", width=100, crs=4326):
     # GENERATE A GEOMETRICAL POINT FOR EACH ASCII CHARACTER
     # axes as iterable lists
     y_axis_i = list(range(nrows))
-    x_axis_i = list(range(ncols))
+    x_axis_i = list(range(width))
 
     # x and y Distance between points
-    x_step = x_extent/ncols
+    x_step = x_extent/width
     y_step = y_extent/nrows
 
     # generate points
